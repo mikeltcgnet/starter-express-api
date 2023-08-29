@@ -5,8 +5,8 @@ const app = express()
 const mongoDB = process.env.DB_CONNECTION_STRING;
 
 app.all('/', (req, res) => {
-    main();
     console.log("Just got a request!")
+    main();
     console.log(process.env.DB_CONNECTION_STRING)
     res.send('Yo!')
 })
@@ -46,7 +46,9 @@ const partnerSchema = new Schema({
    // main().catch((err) => console.log(err));
     async function main() {
       try{
-        const mongoDB = process.env.DB_CONNECTION_STRING;
+        console.log('trying to connect to mongo...');
+       // const mongoDB = process.env.DB_CONNECTION_STRING;
+       const mongoDB = "mongodb+srv://admin:P%23ssword1212@relationshipcluster.k27hm3q.mongodb.net/Relationships";
         await mongoose.connect(mongoDB);
         console.log('connected');
          
