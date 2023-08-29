@@ -46,11 +46,7 @@ const partnerSchema = new Schema({
    // main().catch((err) => console.log(err));
     async function main() {
       try{
-        console.log('trying to connect to mongo...');
-       // const mongoDB = process.env.DB_CONNECTION_STRING;
-       const mongoDB = "mongodb+srv://admin:P%23ssword1212@relationshipcluster.k27hm3q.mongodb.net/Relationships";
-        await mongoose.connect(mongoDB);
-        console.log('connected');
+       
          
         const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
         console.log('person found');
@@ -64,6 +60,11 @@ const partnerSchema = new Schema({
     }
 
       try{
+        console.log('trying to connect to mongo...');
+        // const mongoDB = process.env.DB_CONNECTION_STRING;
+        const mongoDB = "mongodb+srv://admin:P%23ssword1212@relationshipcluster.k27hm3q.mongodb.net/Relationships";
+         mongoose.connect(mongoDB);
+         console.log('connected to mongo');
         console.log("start listening");
         app.listen(process.env.PORT || 3000,() => {
           console.log("listening for requests");
