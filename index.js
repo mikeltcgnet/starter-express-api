@@ -4,6 +4,7 @@ const app = express()
 app.all('/', (req, res) => {
     main();
     console.log("Just got a request!")
+    console.log(process.env.DB_CONNECTION_STRING)
     res.send('Yo!')
 })
 
@@ -16,7 +17,7 @@ app.all('/', (req, res) => {
 mongoose.set("strictQuery", false);
 
 // Define the database URL to connect to.
-const mongoDB = "mongodb+srv://admin:P%23ssword1212@relationshipcluster.k27hm3q.mongodb.net/Relationships";
+const mongoDB = process.env.DB_CONNECTION_STRING;
 const { Schema } = mongoose;
 
 
