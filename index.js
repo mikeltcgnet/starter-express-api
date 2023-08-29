@@ -46,6 +46,7 @@ const partnerSchema = new Schema({
     async function main() {
       try{
         await mongoose.connect(mongoDB);
+        
         console.log('connected');
         const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
         console.log('person found');
