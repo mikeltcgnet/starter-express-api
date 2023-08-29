@@ -57,7 +57,7 @@ const partnerSchema = new Schema({
         console.log('smith created');
       } catch  (err){
         console.log('ERROR connecting:'+  err);
-        exit;
+        return false;
       }
     }
 
@@ -68,7 +68,7 @@ const partnerSchema = new Schema({
       });
       } catch  (err){
         console.log('ERROR connecting:'+  err);
-          exit;
+        return false;
         }
        
     
