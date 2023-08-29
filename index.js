@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 // Define the database URL to connect to.
 const mongoDB = process.env.DB_CONNECTION_STRING;
+
 app.all('/', (req, res) => {
     main();
     console.log("Just got a request!")
@@ -45,22 +46,20 @@ const partnerSchema = new Schema({
     main().catch((err) => console.log(err));
     async function main() {
       try{
+        const mongoDB = process.env.DB_CONNECTION_STRING;
         await mongoose.connect(mongoDB);
-        mongoose.connect(MONGODB,err => {
-          if(err){ console.error(err); return false;}
-          // connection to mongo is successful, listen for requests
-          app.listen(PORT, () => {
-              console.log("listening for requests");
-          })
-      });
         console.log('connected');
+        app.listen(process.env.PORT || 3000,() => {
+          console.log("listening for requests");
+      });
         const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
         console.log('person found');
         console.log('name is '+ person);
         PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
         console.log('smith created');
-      } catch{
-        console.log('ERROR connecting');
+      } catch  (err){
+        console.log('ERROR connecting:'+  err);
+        exit;
       }
     
     const partnerWithData = await PartnerModel.findOne({ DOB: '1/1/2000' })
@@ -69,4 +68,4 @@ console.log(""+partnerWithData);
    
 }
 
-app.listen(process.env.PORT || 3000)
+ 
