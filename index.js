@@ -29,7 +29,7 @@ const customerSchema = new Schema({
   });
 const CustomerModel = mongoose.model('customer', customerSchema);
 
-newCust = CustomerModel.create({ first: 'Mike', last:"Leon",email:"mleon@gmail.com"});
+//newCust = CustomerModel.create({ first: 'Mike', last:"Leon",email:"mleon@gmail.com"});
 const partnerSchema = new Schema({
     name: String, // String is shorthand for {type: String}
     DOB: Date,
@@ -43,15 +43,13 @@ const partnerSchema = new Schema({
     const PartnerModel = mongoose.model('partner', partnerSchema);
     
     // Wait for database to connect, logging an error if there is a problem
-    main().catch((err) => console.log(err));
+   // main().catch((err) => console.log(err));
     async function main() {
       try{
         const mongoDB = process.env.DB_CONNECTION_STRING;
         await mongoose.connect(mongoDB);
         console.log('connected');
-        app.listen(process.env.PORT || 3000,() => {
-          console.log("listening for requests");
-      });
+         
         const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
         console.log('person found');
         console.log('name is '+ person);
@@ -61,11 +59,19 @@ const partnerSchema = new Schema({
         console.log('ERROR connecting:'+  err);
         exit;
       }
+    }
+
+      try{
+        console.log("start listening");
+        app.listen(process.env.PORT || 3000,() => {
+          console.log("listening for requests");
+      });
+      } catch  (err){
+        console.log('ERROR connecting:'+  err);
+          exit;
+        }
+       
     
-    const partnerWithData = await PartnerModel.findOne({ DOB: '1/1/2000' })
-    .populate("customer")
-console.log(""+partnerWithData);
-   
-}
+    
 
  
