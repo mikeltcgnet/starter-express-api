@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const express = require('express')
 const app = express()
+// Define the database URL to connect to.
+const mongoDB = process.env.DB_CONNECTION_STRING;
 app.all('/', (req, res) => {
     main();
     console.log("Just got a request!")
@@ -16,8 +18,6 @@ app.all('/', (req, res) => {
 // See: https://mongoosejs.com/docs/migrating_to_6.html#strictquery-is-removed-and-replaced-by-strict
 mongoose.set("strictQuery", false);
 
-// Define the database URL to connect to.
-const mongoDB = process.env.DB_CONNECTION_STRING;
 const { Schema } = mongoose;
 
 
