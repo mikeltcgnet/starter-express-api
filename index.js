@@ -44,8 +44,12 @@ const partnerSchema = new Schema({
     // Wait for database to connect, logging an error if there is a problem
     main().catch((err) => console.log(err));
     async function main() {
+      try{
         await mongoose.connect(mongoDB);
         console.log('connected');
+      } catch{
+        console.log('ERROR connecting');
+      }
         const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
           console.log('person found');
         PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
