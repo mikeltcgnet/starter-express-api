@@ -44,11 +44,11 @@ const partnerSchema = new Schema({
     
     // Wait for database to connect, logging an error if there is a problem
    // main().catch((err) => console.log(err));
-    async function main() {
+    function main() {
       try{
        
-         
-        const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
+        console.log('try to person found');
+        const person = CustomerModel.findOne({ last: 'Leon' }).exec();
         console.log('person found');
         console.log('name is '+ person);
         PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
