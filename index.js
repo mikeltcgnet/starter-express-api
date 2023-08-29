@@ -47,13 +47,14 @@ const partnerSchema = new Schema({
       try{
         await mongoose.connect(mongoDB);
         console.log('connected');
+        const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
+        console.log('person found');
+        console.log('name is '+ person);
+        PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
+        console.log('smith created');
       } catch{
         console.log('ERROR connecting');
       }
-        const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
-          console.log('person found');
-        PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
-    console.log('name is '+ person);
     
     const partnerWithData = await PartnerModel.findOne({ DOB: '1/1/2000' })
     .populate("customer")
