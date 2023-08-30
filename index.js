@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const relationshipModel = require('Models/Relationships');
-const app = express()
+const relationshipModel = require('./models/relationships');
+const routes = require('./routes/routes');
 // Define the database URL to connect to.
 const mongoDB = process.env.DB_CONNECTION_STRING;
 
-
-
-app.all('/', (req, res) => {
+const app = express()
+app.use('/api', routes);
+app.get('/', (req, res) => {
   createRelationshipsTable();
     main();
     console.log("Just got a request!")
@@ -15,7 +15,7 @@ app.all('/', (req, res) => {
     res.send('Yo!')
 })
 
-// Import the mongoose module
+ 
  
 
 // Set `strictQuery: false` to globally opt into filtering by properties that aren't in the schema
@@ -23,40 +23,16 @@ app.all('/', (req, res) => {
 // See: https://mongoosejs.com/docs/migrating_to_6.html#strictquery-is-removed-and-replaced-by-strict
 mongoose.set("strictQuery", false);
 
-const { Schema } = mongoose;
-
-
-const customerSchema = new Schema({
-  first: String, // String is shorthand for {type: String}
-  last: String,
-  email:String,
-  });
-const CustomerModel = mongoose.model('customer', customerSchema);
-
-//newCust = CustomerModel.create({ first: 'Mike', last:"Leon",email:"mleon@gmail.com"});
-const partnerSchema = new Schema({
-    name: String, // String is shorthand for {type: String}
-    DOB: Date,
-    DateStarted:Date,
-    DateEnded:Date,
-    customer: {
-      type: Schema.Types.ObjectId,
-      ref: "customer"
-    }
-    });
-    const PartnerModel = mongoose.model('partner', partnerSchema);
-    
-    // Wait for database to connect, logging an error if there is a problem
-   // main().catch((err) => console.log(err));
+ 
+ 
     async function main() {
       try{
         await mongoose.connect(mongoDB);
         console.log('connected');
-        const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
+        const person = await relationshipModel.findOne({ last: 'Smithers' }).exec();
         console.log('person found');
         console.log('name is '+ person);
-        PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
-        console.log('smith created');
+         
       } catch  (err){
         console.log('ERROR connecting:'+  err);
         exit;
