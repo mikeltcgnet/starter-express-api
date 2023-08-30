@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
-const express = require('express')
+const express = require('express');
+const relationshipModel = require('Models/Relationships');
 const app = express()
 // Define the database URL to connect to.
 const mongoDB = process.env.DB_CONNECTION_STRING;
 
+
+
 app.all('/', (req, res) => {
+  createRelationshipsTable();
     main();
     console.log("Just got a request!")
     console.log(process.env.DB_CONNECTION_STRING)
@@ -69,7 +73,8 @@ const partnerSchema = new Schema({
           return false;
         }
        
+    function createRelationshipsTable(){
+      
+      relationshipModel.create({ firstName: 'Linda', lastName:'Smithers', partners:[{firstName:"Mike", lastName:"Leon"}, {firstName:"Tom", lastName:"Leonard", DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'}]});
+    }
     
-    
-
- 
