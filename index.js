@@ -5,8 +5,8 @@ const app = express()
 const mongoDB = process.env.DB_CONNECTION_STRING;
 
 app.all('/', (req, res) => {
-    console.log("Just got a request!")
     main();
+    console.log("Just got a request!")
     console.log(process.env.DB_CONNECTION_STRING)
     res.send('Yo!')
 })
@@ -44,40 +44,29 @@ const partnerSchema = new Schema({
     
     // Wait for database to connect, logging an error if there is a problem
    // main().catch((err) => console.log(err));
-    function main() {
+    async function main() {
       try{
-       
-        console.log('try to person found');
-        const person = CustomerModel.findOne({ last: 'Leon' }).exec();
+        await mongoose.connect(mongoDB);
+        console.log('connected');
+        const person = await CustomerModel.findOne({ last: 'Leon' }).exec();
         console.log('person found');
         console.log('name is '+ person);
         PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
         console.log('smith created');
       } catch  (err){
         console.log('ERROR connecting:'+  err);
-        return false;
+        exit;
       }
     }
 
       try{
-        console.log('trying to connect to mongo...');
-        // const mongoDB = process.env.DB_CONNECTION_STRING;
-        const mongoDB = "mongodb+srv://admin:P%23ssword1212@relationshipcluster.k27hm3q.mongodb.net/Relationships";
-         mongoose.connect(mongoDB);
-         console.log('try to person found');
-        const person = CustomerModel.findOne({ last: 'Leon' }).exec();
-        console.log('person found');
-        console.log('name is '+ person);
-        PartnerModel.create({ customer:person.id, name: 'Linda Smith', DOB:'1/1/2000', DateStarted: '3/2/2022', DateEnded:'3/3/2022'});
-        console.log('smith created');
-         console.log('connected to mongo');
         console.log("start listening");
         app.listen(process.env.PORT || 3000,() => {
           console.log("listening for requests");
       });
       } catch  (err){
-        console.log('ERROR connecting:'+  err);
-        return false;
+        console.log('ERROR starting to listen:'+  err);
+          return false;
         }
        
     
