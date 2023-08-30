@@ -6,6 +6,7 @@ const routes = require('./routes/routes');
 const mongoDB = process.env.DB_CONNECTION_STRING;
 
 const app = express()
+app.use(express.json());  //needs to be before root
 app.use('/api', routes);
 app.get('/', (req, res) => {
   createRelationshipsTable();
@@ -23,11 +24,34 @@ app.get('/', (req, res) => {
 // See: https://mongoosejs.com/docs/migrating_to_6.html#strictquery-is-removed-and-replaced-by-strict
 mongoose.set("strictQuery", false);
 
+ try{
+        mongoose.connect(mongoDB);
+        const database = mongoose.connection;
+         
+        console.log('trying db connection');
+        database.once('connected', () => {
+          console.log('Database Connected');
+          try{
+            console.log("start listening");
+            app.listen(process.env.PORT || 3000,() => {
+              console.log("listening for requests");
+          });
+          } catch  (err){
+            console.log('ERROR starting to listen:'+  err);
+              return false;
+            }
+ })
+         
+      } catch  (err){
+        console.log('ERROR connecting:'+  err);
+        return false;
+      }
+
  
  
     async function main() {
       try{
-        await mongoose.connect(mongoDB);
+        //await mongoose.connect(mongoDB);
         console.log('connected');
         const person = await relationshipModel.findOne({ last: 'Smithers' }).exec();
         console.log('person found');
@@ -39,15 +63,7 @@ mongoose.set("strictQuery", false);
       }
     }
 
-      try{
-        console.log("start listening");
-        app.listen(process.env.PORT || 3000,() => {
-          console.log("listening for requests");
-      });
-      } catch  (err){
-        console.log('ERROR starting to listen:'+  err);
-          return false;
-        }
+     
        
     function createRelationshipsTable(){
       

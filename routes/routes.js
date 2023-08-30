@@ -1,9 +1,30 @@
 const express = require('express');
+const relationshipModel = require('../models/relationships');
 
 const router = express.Router()
 //Post Method
-router.post('/post', (req, res) => {
-    res.send('Post API')
+router.post('/post', async(req, res) => {
+    const rel = req.body;
+    const data = new relationshipModel({
+        firstName: rel.firstName,
+        lastName: rel.lastName,  
+        partners:[{
+            firstName: rel.partners[0].firstName,
+            lastName: rel.partners[0].lastName,
+            DOB: rel.partners[0].DOB,
+            dateStarted:rel.partners[0].dateStarted,
+            dateEnded:rel.partners[0].dateEnded
+        }]
+
+    })
+
+    try{
+        const dataToSave = await data.save();
+        res.status(200).json(dataToSave)
+    }
+    catch(error){
+        console.log("Just got a error!"+ error)
+    }
 })
 
 //Get all Method

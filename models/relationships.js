@@ -2,16 +2,7 @@
 const mongoose = require('mongoose'),
 Schema = mongoose.Schema;
 
-const partnerSchema = new Schema({
-    name: String, // String is shorthand for {type: String}
-    DOB: Date,
-    DateStarted:Date,
-    DateEnded:Date,
-    relationships:[{
-        firstName: { type: String},
-        lastName: { type: String}
-    }]
-});
+ 
 
 const relationshipsSchema = new Schema({
     firstName: { type: String},
@@ -19,9 +10,9 @@ const relationshipsSchema = new Schema({
      partners:[{
         firstName: { type: String},
         lastName: { type: String},
-        DOB: Date,
-        DateStarted:Date,
-        DateEnded:Date,
+        DOB: {type: Date},
+        dateStarted:{type: Date},
+        dateEnded:{type: Date}
     }]
 });
 
