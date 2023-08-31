@@ -4,7 +4,7 @@ Schema = mongoose.Schema;
 
  
 
-const relationshipsSchema = new Schema({
+const schema = new Schema({
     firstName: { type: String},
     lastName: { type: String},
      partners:[{
@@ -16,4 +16,4 @@ const relationshipsSchema = new Schema({
     }]
 });
 
-module.exports = mongoose.model('relationships', relationshipsSchema)
+module.exports = mongoose.model('relationships', schema)
