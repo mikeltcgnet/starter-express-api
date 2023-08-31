@@ -5,7 +5,8 @@ Schema = mongoose.Schema;
  
 
 const schema = new Schema({
-    brand:{type:String}
+    brand:{type:String},
+    model:{type:String},
 });
 
 module.exports = mongoose.model('autos', schema)

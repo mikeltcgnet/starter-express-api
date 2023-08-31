@@ -6,7 +6,8 @@ const router = express.Router()
 router.post('/post', async(req, res) => {
     const auto = req.body;
     const data = new model({
-        brand: auto.brand
+        brand: auto.brand,
+        model:auto.model
     })
 
     try{
