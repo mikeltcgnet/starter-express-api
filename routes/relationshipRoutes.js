@@ -2,12 +2,14 @@ const pCloudSdk = require('pcloud-sdk-js');
 const multer = require('multer');
 const storage= multer.memoryStorage();
 const upload = multer({storage: storage});
+const streamifier = require('streamifier');
+const Readable = require('stream');
 const express = require('express');
 const axios = require('axios')
 const FormData = require('form-data');
 const fs = require('fs');
 const model = require('../models/relationships');
-const pcloudToken = process.env.PCLOUD_TOKEN;
+const pcloudToken = 'nbPD7Z6KsHoSQb6auZx31bykZG6S2MoQz85kraAE78Ar0u8y2FqOV';
 
 const router = express.Router()
 //Post Method
@@ -104,9 +106,20 @@ router.delete('/delete/:id', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
+//upload using axios stream
+
+router.post('/photousingaxiosstream',upload.single('image'), async(req, res)=>{
+    const writeStream = fs.createWriteStream('file4.png');
+    const readStream = streamifier.createReadStream(req.file.buffer);
+    readStream.pipe(writeStream);
+    response = await uploadStreamedPhoto(fs.createReadStream('file4.png'),'newfile');
+    
+    console.log(JSON.stringify(response.data));
+    res.status(200).json(response.data);
+    });
 
 //upload using axios
-router.get('/photousingaxios', async(req, res)=>{
+router.post('/photousingaxios', async(req, res)=>{
     
 response = await uploadStreamedPhoto(fs.createReadStream('F:/f.html'),'newfile');
 
