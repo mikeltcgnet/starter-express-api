@@ -1,5 +1,13 @@
+const pCloudSdk = require('pcloud-sdk-js');
+const multer = require('multer');
+const storage= multer.memoryStorage();
+const upload = multer({storage: storage});
 const express = require('express');
+const axios = require('axios')
+const FormData = require('form-data');
+const fs = require('fs');
 const model = require('../models/relationships');
+const pcloudToken = process.env.PCLOUD_TOKEN;
 
 const router = express.Router()
 //Post Method
@@ -96,4 +104,92 @@ router.delete('/delete/:id', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
+
+//upload using axios
+router.get('/photousingaxios', async(req, res)=>{
+    
+response = await uploadStreamedPhoto(fs.createReadStream('F:/f.html'),'newfile');
+
+console.log(JSON.stringify(response.data));
+res.status(200).json(response.data);
+});
+   
+
+//upload photo
+router.post('/photo',upload.single('image'),(req,res)=>{
+ //   console.log(req.body);
+  // console.log(req.file);
+ //   var f = req.file;
+   var buf = req.file.buffer.toString('base64');
+   //console.log(buf);
+   // Upload code Here
+ uploadPhoto(buf);
+res.status(200).json({"result":"ok"});
+});
+
+//upload photo
+router.post('/getFolder', async (req, res) => {
+    let folder = await getRelationshipsFolder();
+        console.log(folder);
+        uploadPhoto();
+        await listFolders();
+     res.status(200).json(listFolders());
+    
+    
+ });
+ 
+async function listFolders(){
+    client = pCloudSdk.createClient(pcloudToken);
+    locationid =   1;
+    return await client.listfolder(); 
+     
+    
+  }
+
+  async function getRelationshipsFolder(){
+    client = pCloudSdk.createClient(pcloudToken);
+    locationid =   1;
+    let allFolders = await client.listfolder();
+    return allFolders.contents.find(f=>f.name=="relationships"); 
+  
+    
+  }      
+
+ async function uploadStreamedPhoto(stream, fileName){
+    let data = new FormData();
+data.append('', stream);
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.pcloud.com/uploadfile?auth=7iQueXZnbPD7ZDDjkhTR3n745LIhVv2JV1XFNWlXV&path=/relationships&filename='+fileName,
+        headers: { 
+          ...data.getHeaders()
+        },
+        data : data
+      };
+      
+     return await axios.request(config);
+       
+     
+   
+  }
+  async function uploadPhoto(image){
+     let file = "./f.html";     
+    client = pCloudSdk.createClient(pcloudToken);
+    locationid =   1;
+    client.upload(file,"18592336246", {
+        onBegin: function() {
+          console.log('Upload started.');
+        },
+        onProgress: function(progress) {
+          console.log(progress.direction, progress.loaded, progress.total);
+        },
+        onFinish: function(uploadData) {
+     //     console.log(uploadData);
+        }
+      });
+    
+ }
+ 
 module.exports = router;
